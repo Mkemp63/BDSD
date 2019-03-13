@@ -118,6 +118,7 @@ def main():
         if os.path.getsize(os.getcwd() + '/scraper/json/' + filename) > 0:
             newdf = to_df(os.getcwd() + '/scraper/json/' + filename, i, df, filename)
             i += 1
+        os.remove(filename)
     df_idf = newdf
     df_idf['text'] = df_idf['content']
     df_idf['text'] = df_idf['text'].apply(lambda x: pre_process(x))

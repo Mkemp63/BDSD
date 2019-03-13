@@ -22,6 +22,7 @@ def insert(connection, filename):
         my_file = fs.read().decode('utf-8')
         cur.copy("COPY big_data_system_design FROM STDIN parser fjsonparser()", my_file)
         connection.commit()
+        os.remove(filename)
 
 
 def select(connection):
