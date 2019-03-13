@@ -20,7 +20,7 @@ def insert(connection, filename):
     cur = connection.cursor()
     with open(filename, "rb") as fs:
         my_file = fs.read().decode('utf-8')
-        cur.copy("COPY big_data_system_design FROM STDIN parser fjsonparser()", my_file)
+        cur.copy("COPY big_data_system_design FROM STDIN parser fjsonparser(flatten_maps=false, flatten_arrays=true)", my_file)
         connection.commit()
         os.remove(filename)
 
@@ -29,7 +29,8 @@ def select(connection):
     cur = connection.cursor()
     cur.execute("SELECT MAPTOSTRING(__raw__) FROM big_data_system_design")
     connection.close()
-
+    for row in cur.fetchall():
+        return row
 
 def main():
     conn = connect_to_db()

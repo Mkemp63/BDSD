@@ -1,4 +1,6 @@
+
 # BDSD
+
 install required packages: <code>pip install -r requirements.txt</code>
 on windows: <code>conda install scrapy</code>, pip install sometime fails
 
