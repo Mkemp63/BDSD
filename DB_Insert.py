@@ -20,7 +20,7 @@ def insert(connection, filename):
     cur = connection.cursor()
     with open(filename, "rb") as fs:
         my_file = fs.read().decode('utf-8')
-        cur.copy("COPY json FROM STDIN parser fjsonparser(flatten_maps=false)", my_file)
+        cur.copy("COPY big_data_system_design FROM STDIN parser fjsonparser()", my_file)
         connection.commit()
 
 
@@ -39,7 +39,7 @@ def main():
     path = os.getcwd()
     for i in os.listdir(path):
         if os.path.isfile(os.path.join(path, i)) and 'partij-' in i:
-            insert(conn)
+            insert(conn, i)
     select(conn)
 
 
