@@ -11,7 +11,8 @@ def corpify():
     conn = dbi.connect_to_db()
     rows = dbi.select(conn)
     for row in rows:
-        corpus.append(row)
+        corpus.append((row[1], row[0]))
+    conn.close()
     return corpus
 
 
@@ -30,16 +31,9 @@ def find_similar(tfidf_matrix, index, top_n=3):
 def main():
     corpus = corpify()
     matrix = fit_transform_vectorizer(corpus)
-    if sys.argv:
-        for index, score in find_similar(matrix, sys.argv[-1]):
-            print(score, corpus[index])
-    else:
-        for index, score in find_similar(matrix, 1):
-            print(score, corpus[index])
-
-
+    for index, score in find_similar(matrix, 1):
+        print(score, corpus[index])
 
 
 if __name__ == '__main__':
     main()
-

@@ -20,19 +20,29 @@ def insert(connection, filename):
     cur = connection.cursor()
     with open(filename, "rb") as fs:
         my_file = fs.read().decode('utf-8')
-        cur.copy("COPY big_data_system_design FROM STDIN parser fjsonparser(flatten_maps=false, flatten_arrays=true)", my_file)
+        cur.copy("COPY big_data_system_design FROM STDIN parser fjsonparser(flatten_maps=false, flatten_arrays=true)",
+                 my_file)
         connection.commit()
-        #os.remove(filename)
+        # os.remove(filename)
 
 
 def select(connection):
     cur = connection.cursor()
-    cur.execute("SELECT MAPTOSTRING(__raw__) FROM big_data_system_design")
-    rows = cur.fetchall()
-    print(rows)
-    connection.close()
+    cur.execute("select content, title, maptostring(keywords) from big_data_system_design")
+    results = []
     for row in cur.fetchall():
-        return row
+        results.append(row)
+    return results
+
+
+def selectsearch(connection, searchKey):
+    cur = connection.cursor()
+    cur.execute("select content, title, regexp_count(maptostring(keywords), '"+searchKey+"') as 'keywordscount', regexp_count(content, '"+searchKey+"') as 'contentcount', regexp_count(title, '"+searchKey+"') as 'titlecount' from big_data_system_design where regexp_count(maptostring(keywords), '"+searchKey+"') > 0 or regexp_count(content, '"+searchKey+"') > 0 or regexp_count(title, '"+searchKey+"') > 0 order by regexp_count(maptostring(keywords), '"+searchKey+"') desc, regexp_count(title, '"+searchKey+"') desc, regexp_count(content, '"+searchKey+"') desc limit 10")
+    results = []
+    for row in cur.fetchall():
+        results.append(row)
+    return results
+
 
 def main():
     conn = connect_to_db()
@@ -41,7 +51,7 @@ def main():
     for i in os.listdir(path):
         if os.path.isfile(os.path.join(path, i)) and 'partij-' in i:
             insert(conn, i)
-    select(conn)
+    conn.close()
 
 
 if __name__ == '__main__':
