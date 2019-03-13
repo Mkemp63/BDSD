@@ -1,5 +1,11 @@
 # BDSD
 install required packages: pip install -r requirements.txt
+on windows: conda install scrapy, pip install sometime fails
+
 
 Prerequisites:
-Microsoft Visual C++ 14.0: https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2017
+Visual C++ buildtools 14 or 15 (visual studio 2015)
+
+To run the scraper, cd into the scraper map and run <code>scrapy crawl partij</code> in the terminal
+
+To start TFIDF, run <code> TFIDF_pipeline.py </code>
