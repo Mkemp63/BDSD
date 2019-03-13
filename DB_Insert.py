@@ -22,12 +22,14 @@ def insert(connection, filename):
         my_file = fs.read().decode('utf-8')
         cur.copy("COPY big_data_system_design FROM STDIN parser fjsonparser(flatten_maps=false, flatten_arrays=true)", my_file)
         connection.commit()
-        os.remove(filename)
+        #os.remove(filename)
 
 
 def select(connection):
     cur = connection.cursor()
     cur.execute("SELECT MAPTOSTRING(__raw__) FROM big_data_system_design")
+    rows = cur.fetchall()
+    print(rows)
     connection.close()
     for row in cur.fetchall():
         return row
