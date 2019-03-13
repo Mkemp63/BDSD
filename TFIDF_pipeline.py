@@ -3,7 +3,6 @@ import pandas as pd
 import re
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
-import requests
 import os
 from nltk.corpus import stopwords
 
@@ -104,7 +103,8 @@ def to_json(title, content, keywords):
     data = {'title': title, 'content': content, 'keywords': keywords}
     json_data = json.dumps(data)
     with open(title + 'result.json', 'w') as fp:
-        json.dump(json_data, fp)
+        file = json.dump(json_data, fp)
+    return file
 
 
 def print_results(idx, keywords, docs_body, docs_title):

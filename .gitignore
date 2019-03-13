@@ -2,3 +2,5 @@ data.json
 norq/
 .idea
 venv/
+scraper/json/
+partij*

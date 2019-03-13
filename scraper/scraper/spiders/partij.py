@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-
 import lxml.etree
 import lxml.html
 import scrapy
@@ -13,7 +12,7 @@ class PartijSpider(scrapy.spiders.Spider):
     name = 'partij'
     with open('scraper/spiders/osf_urls.csv', 'r+') as f:
         data = pd.read_csv(f)
-    start_urls = data['Website'][1:25].dropna().tolist()
+    start_urls = data['Website'][1:].dropna().tolist()
     os.chdir(os.getcwd() + "/json")
 
     def parse(self, response):
