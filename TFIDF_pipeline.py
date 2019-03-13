@@ -8,10 +8,13 @@ import os
 from nltk.corpus import stopwords
 
 
-def to_df(json_file_path):
+def to_df(json_file_path, i, df, filename):
     with open(json_file_path) as f:
         data = json.load(f)
-    df_idf = pd.DataFrame.from_dict(data['articles'])
+    df.content.loc[i] = data['content']
+    df.title.loc[i] = filename
+    series = [df.content, df.title]
+    df_idf = pd.concat(series, axis=1)
     return df_idf
 
 
@@ -97,31 +100,26 @@ def get_keywords(idx, tfidf_transformer, docs, cv, feature_names):
     return keywords
 
 
-def print_results(idx, keywords, docs_title, docs_body):
-    # now print the results
-    print("\n=====Title=====")
-    print(docs_title[idx])
-    print("\n=====Body=====")
-    print(docs_body[idx])
-    print("\n===Keywords===")
-    for k in keywords:
-        print(k, keywords[k])
+def to_json(title, content, keywords):
+    data = {'title': title, 'content': content, 'keywords': keywords}
+    json_data = json.dumps(data)
+    with open(title + 'result.json', 'w') as fp:
+        json.dump(json_data, fp)
+
+
+def print_results(idx, keywords, docs_body, docs_title):
+    to_json(docs_title[idx], docs_body[idx], keywords)
 
 
 def main():
-    # get dummy data, run once
-    if not os.path.isfile('./data.json'):
-        url = ('https://newsapi.org/v2/top-headlines?'
-               'country=nl&'
-               'apiKey=c8fbcb5d3d9c46a19f22042eb9363cc5')
-        response = requests.get(url)
-        print('file created')
-        with open('data.json', 'w+') as outfile:
-            json.dump(response.json(), outfile)
-
-    # change json file name/path and column names
-    df_idf = to_df('data.json')
-    df_idf['text'] = df_idf['title'] + " " + df_idf['content']
+    i = 0
+    df = pd.DataFrame(columns=['content', 'title'])
+    for filename in os.listdir(os.getcwd() + '\scraper\json'):
+        if os.path.getsize(os.getcwd() + '/scraper/json/' + filename) > 0:
+            newdf = to_df(os.getcwd() + '/scraper/json/' + filename, i, df, filename)
+            i += 1
+    df_idf = newdf
+    df_idf['text'] = df_idf['content']
     df_idf['text'] = df_idf['text'].apply(lambda x: pre_process(x))
     # change stopwords file name/path
     stopWords = stopwords.words('dutch')
@@ -130,13 +128,13 @@ def main():
     cv = elim_stopwords(85, stopWords, docs)[1]
     tfidf_transformer = compute_idf(word_count_vector)
     feature_names = cv.get_feature_names()
-    docs_title = df_idf['title'].tolist()
     docs_body = df_idf['content'].tolist()
-    i = 0
-    for idx in docs:
-        keywords = get_keywords(i, tfidf_transformer, docs, cv, feature_names)
-        print_results(i, keywords, docs_title, docs_body)
-        i += 1
+    docs_title = df_idf['title'].tolist()
+    x = 0
+    for i in docs:
+        keywords = get_keywords(x, tfidf_transformer, docs, cv, feature_names)
+        print_results(x, keywords, docs_body, docs_title)
+        x += 1
 
 
 if __name__ == '__main__':
