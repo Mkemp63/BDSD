@@ -38,7 +38,7 @@ def main():
     # for json file:
     path = os.getcwd()
     for i in os.listdir(path):
-        if os.path.isfile(os.path.join(path,i)) and 'partij-' in i:
+        if os.path.isfile(os.path.join(path, i)) and 'partij-' in i:
             insert(conn)
     select(conn)
 
