@@ -4,7 +4,6 @@ import lxml.etree
 import lxml.html
 import scrapy
 import pandas as pd
-from scrapy.spiders import BaseSpider
 import re
 
 
