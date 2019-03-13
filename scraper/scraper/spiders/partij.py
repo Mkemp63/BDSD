@@ -9,8 +9,9 @@ import re
 
 
 class PartijSpider(scrapy.spiders.Spider):
-    path = 'scraper/json'
-    os.mkdir(path)
+    if not os.path.isdir('scraper/json'):
+        path = 'scraper/json'
+        os.mkdir(path)
 
     name = 'partij'
     with open('scraper/spiders/osf_urls.csv', 'r+') as f:
