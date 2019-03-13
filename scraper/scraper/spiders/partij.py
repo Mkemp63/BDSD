@@ -9,8 +9,8 @@ import re
 
 
 class PartijSpider(scrapy.spiders.Spider):
-    if not os.path.isdir('scraper/json'):
-        path = 'scraper/json'
+    if not os.path.isdir('.\json'):
+        path = '.\json'
         os.mkdir(path)
 
     name = 'partij'
