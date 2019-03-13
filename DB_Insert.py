@@ -28,9 +28,6 @@ def insert(connection, filename):
 def select(connection):
     cur = connection.cursor()
     cur.execute("SELECT MAPTOSTRING(__raw__) FROM big_data_system_design")
-    for row in cur.iterate():
-        dict = dict(row)
-
     connection.close()
 
 

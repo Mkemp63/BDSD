@@ -101,9 +101,8 @@ def get_keywords(idx, tfidf_transformer, docs, cv, feature_names):
 
 def to_json(title, content, keywords):
     data = {'title': title, 'content': content, 'keywords': keywords}
-    json_data = json.dumps(data)
     with open(title + 'result.json', 'w') as fp:
-        file = json.dump(json_data, fp)
+        file = json.dump(data, fp)
     return file
 
 
@@ -118,7 +117,6 @@ def main():
         if os.path.getsize(os.getcwd() + '/scraper/json/' + filename) > 0:
             newdf = to_df(os.getcwd() + '/scraper/json/' + filename, i, df, filename)
             i += 1
-        os.remove(filename)
     df_idf = newdf
     df_idf['text'] = df_idf['content']
     df_idf['text'] = df_idf['text'].apply(lambda x: pre_process(x))
