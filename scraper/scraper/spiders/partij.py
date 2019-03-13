@@ -15,7 +15,7 @@ class PartijSpider(scrapy.spiders.Spider):
     name = 'partij'
     with open('scraper/spiders/osf_urls.csv', 'r+') as f:
         data = pd.read_csv(f)
-    start_urls = data['Website'][1:].dropna().tolist()
+    start_urls = data['Website'][1:50].dropna().tolist()
     os.chdir(os.getcwd() + "/json")
 
     def parse(self, response):
@@ -31,6 +31,7 @@ class PartijSpider(scrapy.spiders.Spider):
         data = lxml.html.tostring(root, method="text", encoding='unicode')
         new_data = data.replace('\n', ' ').replace('\r', ' ').replace('"', '').replace('\\', ' ').replace('\t', ' ')
         new_data2 = re.sub(r'\s*(?:https?://)?www\.\S*\.[A-Za-z]{2,5}\s*', ' ', new_data).strip()
+        new_data3 = re.sub(' +', ' ', new_data2)
 
         with open(filename, "w") as f:
-            f.write("{ \"content\": \"" + new_data2.strip().replace("\n", " ") + "\" }")
+            f.write("{ \"content\": \"" + new_data3.strip().replace("\n", " ") + "\" }")
