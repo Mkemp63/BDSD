@@ -31,7 +31,7 @@ def find_similar(tfidf_matrix, index, top_n=3):
 def main():
     corpus = corpify()
     matrix = fit_transform_vectorizer(corpus)
-    for index, score in find_similar(matrix, 1):
+    for index, score in find_similar(matrix, 2):
         print(score, corpus[index])
 
 

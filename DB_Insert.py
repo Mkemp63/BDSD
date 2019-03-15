@@ -23,8 +23,13 @@ def insert(connection, filename):
         cur.copy("COPY big_data_system_design FROM STDIN parser fjsonparser(flatten_maps=false, flatten_arrays=true)",
                  my_file)
         connection.commit()
-        # os.remove(filename)
+    remove_file(filename)
 
+def remove_file(filename):
+    if os.path.exists(filename):
+        os.remove(filename)
+    else:
+        print("Can not delete the file, as it doesn't exist")
 
 def select(connection):
     cur = connection.cursor()

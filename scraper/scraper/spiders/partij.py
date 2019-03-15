@@ -15,7 +15,7 @@ class PartijSpider(scrapy.spiders.Spider):
     name = 'partij'
     with open('scraper/spiders/osf_urls.csv', 'r+') as f:
         data = pd.read_csv(f)
-    start_urls = data['Website'][1:50].dropna().tolist()
+    start_urls = data['Website'][1:40].dropna().tolist()
     os.chdir(os.getcwd() + "/json")
 
     def parse(self, response):
