@@ -8,5 +8,4 @@ vertica-python>=0.9.0
 Scrapy>=1.6
 pywin32
 lxml
-beautifulsoup4
 Twisted>=18.9.0
